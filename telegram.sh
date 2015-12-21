@@ -1,18 +1,19 @@
 #!/usr/bin/expect
 
 
-#variable for destination.
+#variable that represent the name of destination, such as: contact, group name.
 #Tip, replace "spaces" for "_" on the names.
 set TO "<Destination>"
 #variable for message, from 3rd argument to latest argument.
 set MSG [lrange $argv 2 end]
 #variable for timeout
 set timeout 20
-#variable for pattern - it isn't working.
+#variable for pattern - it is working right now.
 set PATTERN "<Pattern>"
 
 
 proc TryConnection { } {
+        global PATTERN
         expect {
                 { -nocase $PATTERN { return true;} }
                 timeout { return false }
@@ -35,7 +36,7 @@ if {[TryConnection] == true} {
         while { $ANSWER == false } {
                 send "dialog_list\r"
                 sleep 10
-                expect PATTERN { set ANSWER true }
+                expect $PATTERN { set ANSWER true }
 }
         #Here the command that send the message.
         send "msg $TO $MSG\r"
